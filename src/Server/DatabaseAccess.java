@@ -57,6 +57,18 @@ public class DatabaseAccess {
         return user;
     }
 
+    public void userInscription(String pseudo, String password) {
+        try {
+            String request = "INSERT INTO `user`(`pseudo`, `password`) VALUES (?, ?)";
+            PreparedStatement statement = connection.prepareStatement(request);
+            statement.setString(1, pseudo);
+            statement.setString(2, password);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
+    }
+
     public void addChatMessage(int id_user, int id_room, String text) {
         try {
             String request = "INSERT INTO `message`(`id_user`, `id_room`, `text`) VALUES (?, ?, ?)";
@@ -66,27 +78,56 @@ public class DatabaseAccess {
             statement.setString(3, text);
             statement.executeUpdate();
         } catch (SQLException e) {
-            System.err.println("Error adding chat message to database: " + e.getMessage());
+            System.err.println(e.getMessage());
         }
     }
 
-    public ArrayList getChatHistory(int id) {
+    public ArrayList getChatHistory(int id_room) {
         ArrayList<String> history = new ArrayList<>();
         try {
             Statement statement = connection.createStatement();
-            String request = "SELECT user.pseudo, message.text FROM message INNER JOIN user ON message.id_user = user.id WHERE message.id_room = " + id;
+            String request = "SELECT user.pseudo, message.text FROM message INNER JOIN user ON message.id_user = user.id WHERE message.id_room = " + id_room;
             ResultSet resultSet = statement.executeQuery(request);
 
             while (resultSet.next()) {
                 String pseudo = resultSet.getString("pseudo");
                 String text = resultSet.getString("text");
-                history.add(pseudo + ": \n" + text);
+                history.add(pseudo + ": \n" + text + "\n\n");
             }
 
         } catch (SQLException e) {
-            System.err.println("Error getting chat history from database: " + e.getMessage());
+            System.err.println(e.getMessage());
         }
         return history;
+    }
+
+    public void addRoom(String name) {
+        try {
+            String request = "INSERT INTO `room`(`name`) VALUES (?)";
+            PreparedStatement statement = connection.prepareStatement(request);
+            statement.setString(1, name);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
+    }
+
+    public ArrayList getRoom() {
+        ArrayList<String> room = new ArrayList<>();
+        try {
+            Statement statement = connection.createStatement();
+            String request = "SELECT name FROM `room` ORDER BY id ASC";
+            ResultSet resultSet = statement.executeQuery(request);
+
+            while (resultSet.next()) {
+                String name = resultSet.getString("name");
+                room.add(name);
+            }
+
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
+        return room;
     }
 
 }
