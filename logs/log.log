@@ -1,0 +1,20 @@
+mars 23, 2023 4:14:35 PM Server.ServerFunction ServerFunction
+WARNING: Server start
+mars 23, 2023 4:14:40 PM Server.ServerFunction ServerFunction
+WARNING: new Client
+mars 23, 2023 4:14:44 PM Server.ServerHandler run
+INFO: Login user:1
+mars 23, 2023 4:14:49 PM Server.ServerHandler run
+INFO: User:1;Room:1;Message:ftgyui
+mars 23, 2023 4:15:06 PM Server.ServerFunction ServerFunction
+WARNING: new Client
+mars 23, 2023 4:15:10 PM Server.ServerHandler run
+INFO: Login user:2
+mars 23, 2023 4:15:14 PM Server.ServerHandler run
+SEVERE: Error handling client: Connection reset
+mars 23, 2023 4:15:14 PM Server.ServerHandler run
+WARNING: Client logout
+mars 23, 2023 4:15:17 PM Server.ServerHandler run
+SEVERE: Error handling client: Connection reset
+mars 23, 2023 4:15:17 PM Server.ServerHandler run
+WARNING: Client logout

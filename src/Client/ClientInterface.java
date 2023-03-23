@@ -16,7 +16,7 @@ import java.util.ArrayList;
 
 public class ClientInterface extends JFrame {
 
-    private DatabaseAccess databaseAccess;
+    private static final int PORT = 8964;
 
     private JPanel loginPanel, chatPanel;
     private JTextArea chatArea;
@@ -46,7 +46,7 @@ public class ClientInterface extends JFrame {
 
         // Connexion au serveur
         try {
-            Socket socket = new Socket("localhost", 1234);
+            Socket socket = new Socket("localhost", PORT);
             out = new PrintWriter(socket.getOutputStream(), true);
 
             // Lecture des messages du serveur
@@ -108,11 +108,11 @@ public class ClientInterface extends JFrame {
                 displayMessage(roomList.getSelectedIndex() + 1);
             }
         });
-        JButton createButton = new JButton("Créer un salon");
+        JButton createButton = new JButton("Add room");
         createButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String roomName = JOptionPane.showInputDialog("Nom du nouveau salon :");
+                String roomName = JOptionPane.showInputDialog("Name room :");
                 if (roomName != null && !roomName.isEmpty()) {
                     roomListModel.addElement(roomName);
                     int index = roomListModel.getSize() - 1;
@@ -152,7 +152,7 @@ public class ClientInterface extends JFrame {
         JButton loginButton = new JButton("Login");
         loginButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
-                out.println("Auth;" + pseudoField.getText() + ";" + passwordField.getText());
+                out.println("Login;" + pseudoField.getText() + ";" + passwordField.getText());
             }
         });
 
@@ -222,7 +222,7 @@ public class ClientInterface extends JFrame {
                     System.out.println("Received message from server: " + inputLine);
 
                     String[] values = inputLine.split(";");
-                    if (values[0].equals("Auth")) {
+                    if (values[0].equals("Login")) {
                         if (values[1].equals("true")) {
                             id = Integer.valueOf(values[2]);
                             pseudo = values[3];

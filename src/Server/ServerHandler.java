@@ -3,37 +3,46 @@ package Server;
 import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.logging.FileHandler;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 
 public class ServerHandler implements Runnable {
 
     private final Socket clientSocket;
     private final DatabaseAccess databaseAccess;
+    private Logger logger;
+
     private String username;
 
-    public ServerHandler(Socket clientSocket, DatabaseAccess databaseAccess) {
+    public ServerHandler(Socket clientSocket, DatabaseAccess databaseAccess, Logger logger) {
         this.clientSocket = clientSocket;
         this.databaseAccess = databaseAccess;
+        this.logger = logger;
     }
 
     @Override
     public void run() {
         try {
+
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             String inputLine;
             while ((inputLine = bufferedReader.readLine()) != null) {
-                System.out.println("Le serveur a reçu le message : " + inputLine);
+
                 String[] values = inputLine.split(";");
 
-                if (values[0].equals("Auth")) {
+                if (values[0].equals("Login")) {
 
                     DataOutputStream outputStream = new DataOutputStream(clientSocket.getOutputStream());
                     ArrayList userLogin = databaseAccess.userLogin(values[1], values[2]);
 
                     if (userLogin.size() != 0) {
-                        outputStream.writeUTF("Auth;true;" + userLogin.get(0) + ";" + userLogin.get(1));
+                        logger.info("Login user:" + userLogin.get(0));
+
+                        outputStream.writeUTF("Login;true;" + userLogin.get(0) + ";" + userLogin.get(1));
                         outputStream.flush();
                     } else {
-                        outputStream.writeUTF("Auth;false");
+                        outputStream.writeUTF("Login;false");
                         outputStream.flush();
                     }
 
@@ -43,12 +52,16 @@ public class ServerHandler implements Runnable {
                     databaseAccess.userInscription(values[1], values[2]);
                     ArrayList userLogin = databaseAccess.userLogin(values[1], values[2]);
 
+                    logger.info("Sign in user:" + userLogin.get(0));
+
                     outputStream.writeUTF("Sign;true;" + userLogin.get(0) + ";" + userLogin.get(1));
                     outputStream.flush();
 
                 } else if (values[0].equals("Message")) {
 
                     databaseAccess.addChatMessage(Integer.valueOf(values[1]), Integer.valueOf(values[3]), values[4]);
+
+                    logger.info("User:" + values[1] + ";Room:" + values[3] + ";Message:" + values[4]);
 
                     for (Socket clientSocket : ServerFunction.clients) {
                         if (clientSocket != this.clientSocket) {
@@ -86,6 +99,8 @@ public class ServerHandler implements Runnable {
 
                         databaseAccess.addRoom(values[2]);
 
+                        logger.info("Add Room :" + values[2]);
+
                         for (Socket clientSocket : ServerFunction.clients) {
                             if (clientSocket != this.clientSocket) {
                                 DataOutputStream outputStream = new DataOutputStream(clientSocket.getOutputStream());
@@ -96,14 +111,19 @@ public class ServerHandler implements Runnable {
                     }
 
                 }
+
             }
+
         } catch (IOException e) {
             System.err.println("Error handling client: " + e.getMessage());
+            logger.severe("Error handling client: " + e.getMessage());
         } finally {
             try {
                 clientSocket.close();
+                logger.warning("Client logout");
             } catch (IOException e) {
                 System.err.println("Error closing client socket: " + e.getMessage());
+                logger.severe("Error closing client socket: " + e.getMessage());
             }
         }
     }
