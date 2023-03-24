@@ -8,11 +8,13 @@ public class DatabaseAccess {
 
     private Connection connection;
 
+    // Constructor
     public DatabaseAccess() throws Exception {
         if (connection == null)
             connection = getDatabaseConnection();
     }
 
+    // Connexion database
     public static Connection getDatabaseConnection() throws Exception {
         Connection connection = null;
         boolean hasFailed = false;
@@ -37,6 +39,7 @@ public class DatabaseAccess {
         return connection;
     }
 
+    // Login user
     public ArrayList userLogin(String pseudo, String password) {
         ArrayList user = new ArrayList<>();
         try {
@@ -57,6 +60,7 @@ public class DatabaseAccess {
         return user;
     }
 
+    // Inscription user
     public void userInscription(String pseudo, String password) {
         try {
             String request = "INSERT INTO `user`(`pseudo`, `password`) VALUES (?, ?)";
@@ -69,6 +73,7 @@ public class DatabaseAccess {
         }
     }
 
+    // Add message in database
     public void addChatMessage(int id_user, int id_room, String text) {
         try {
             String request = "INSERT INTO `message`(`id_user`, `id_room`, `text`) VALUES (?, ?, ?)";
@@ -82,6 +87,7 @@ public class DatabaseAccess {
         }
     }
 
+    // Receive all message by room in database
     public ArrayList getChatHistory(int id_room) {
         ArrayList<String> history = new ArrayList<>();
         try {
@@ -101,6 +107,7 @@ public class DatabaseAccess {
         return history;
     }
 
+    // Add room in database
     public void addRoom(String name) {
         try {
             String request = "INSERT INTO `room`(`name`) VALUES (?)";
@@ -112,6 +119,7 @@ public class DatabaseAccess {
         }
     }
 
+    // Receive all room
     public ArrayList getRoom() {
         ArrayList<String> room = new ArrayList<>();
         try {

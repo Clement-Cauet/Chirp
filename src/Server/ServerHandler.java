@@ -15,6 +15,7 @@ public class ServerHandler implements Runnable {
 
     private String username;
 
+    // Constructor
     public ServerHandler(Socket clientSocket, DatabaseAccess databaseAccess, Logger logger) {
         this.clientSocket = clientSocket;
         this.databaseAccess = databaseAccess;

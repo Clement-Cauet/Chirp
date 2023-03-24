@@ -19,7 +19,7 @@ public class ClientInterface extends JFrame {
     private static final int PORT = 8964;
 
     private JPanel loginPanel, chatPanel;
-    private JTextArea chatArea;
+    private JTextArea pseudoArea, chatArea;
     private JTextField pseudoField, messageField;
     private JPasswordField passwordField;
     private JButton sendButton;
@@ -34,29 +34,28 @@ public class ClientInterface extends JFrame {
         new ClientInterface();
     }
 
-    public ClientInterface() throws Exception {
+    // Constructor ClientInterface
+    public ClientInterface() {
         super("Chirp");
 
         displayLoginPanel();
 
-        // Configurer la fenêtre
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(800, 600);
         setVisible(true);
 
-        // Connexion au serveur
         try {
-            Socket socket = new Socket("localhost", PORT);
+            Socket socket = new Socket("10.200.0.153", PORT);
             out = new PrintWriter(socket.getOutputStream(), true);
 
-            // Lecture des messages du serveur
             new Thread(new ServerHandler(socket)).start();
         } catch (IOException e) {
-            chatArea.append("Impossible de se connecter au serveur.\n");
+            chatArea.append("Unable to connect to the server.\n");
         }
 
     }
 
+    // Creation the chat panel interface
     private void displayChatPanel() {
         chatArea = new JTextArea();
         chatArea.setEditable(false);
@@ -78,6 +77,9 @@ public class ClientInterface extends JFrame {
             }
         });
 
+        pseudoArea = new JTextArea();
+        pseudoArea.setText(pseudo);
+
         messageField = new JTextField(40);
         messageField.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
@@ -94,6 +96,7 @@ public class ClientInterface extends JFrame {
 
         JPanel messagePanel = new JPanel();
         messagePanel.setLayout(new BorderLayout());
+        messagePanel.add(pseudoArea, BorderLayout.WEST);
         messagePanel.add(messageField, BorderLayout.CENTER);
         messagePanel.add(sendButton, BorderLayout.EAST);
 
@@ -142,6 +145,7 @@ public class ClientInterface extends JFrame {
 
     }
 
+    // Creation the login panel interface
     private void displayLoginPanel() {
         JLabel pseudoLabel = new JLabel("Username:");
         JLabel passwordLabel = new JLabel("Password:");
@@ -192,21 +196,25 @@ public class ClientInterface extends JFrame {
         add(loginPanel, BorderLayout.CENTER);
     }
 
+    // Send message to the server
     private void sendMessage(int id_room, String text) {
         out.println("Message;" + id + ";" + pseudo + ";" + id_room + ";" + text);
         chatArea.append(pseudo + ": \n" + text + "\n\n");
         messageField.setText("");
     }
 
+    // Display message in chat
     private void displayMessage(int id_room) {
         chatArea.setText("");
         out.println("Load;" + id_room);
     }
 
+    // Display all room
     private void displayRoom() {
         out.println("Room;1");
     }
 
+    // Message receive by server
     private class ServerHandler implements Runnable {
         private final Socket socket;
 
@@ -222,7 +230,8 @@ public class ClientInterface extends JFrame {
                     System.out.println("Received message from server: " + inputLine);
 
                     String[] values = inputLine.split(";");
-                    if (values[0].equals("Login")) {
+
+                    if (values[0].equals("Login")) { // Login
                         if (values[1].equals("true")) {
                             id = Integer.valueOf(values[2]);
                             pseudo = values[3];

@@ -1,20 +1,36 @@
-mars 23, 2023 4:14:35 PM Server.ServerFunction ServerFunction
+mars 24, 2023 8:15:59 AM Server.ServerFunction ServerFunction
 WARNING: Server start
-mars 23, 2023 4:14:40 PM Server.ServerFunction ServerFunction
+mars 24, 2023 8:16:02 AM Server.ServerFunction ServerFunction
 WARNING: new Client
-mars 23, 2023 4:14:44 PM Server.ServerHandler run
+mars 24, 2023 8:16:04 AM Server.ServerHandler run
+SEVERE: Error handling client: Connection reset
+mars 24, 2023 8:16:04 AM Server.ServerHandler run
+WARNING: Client logout
+mars 24, 2023 8:16:04 AM Server.ServerFunction ServerFunction
+WARNING: new Client
+mars 24, 2023 8:16:07 AM Server.ServerFunction ServerFunction
+WARNING: new Client
+mars 24, 2023 8:16:12 AM Server.ServerHandler run
 INFO: Login user:1
-mars 23, 2023 4:14:49 PM Server.ServerHandler run
-INFO: User:1;Room:1;Message:ftgyui
-mars 23, 2023 4:15:06 PM Server.ServerFunction ServerFunction
+mars 24, 2023 8:16:13 AM Server.ServerFunction ServerFunction
 WARNING: new Client
-mars 23, 2023 4:15:10 PM Server.ServerHandler run
+mars 24, 2023 8:16:22 AM Server.ServerHandler run
+INFO: Login user:9
+mars 24, 2023 8:16:22 AM Server.ServerHandler run
 INFO: Login user:2
-mars 23, 2023 4:15:14 PM Server.ServerHandler run
-SEVERE: Error handling client: Connection reset
-mars 23, 2023 4:15:14 PM Server.ServerHandler run
+mars 24, 2023 8:16:26 AM Server.ServerHandler run
+INFO: Add Room :fg
+mars 24, 2023 8:16:26 AM Server.ServerHandler run
+SEVERE: Error handling client: Socket is closed
+mars 24, 2023 8:16:26 AM Server.ServerHandler run
 WARNING: Client logout
-mars 23, 2023 4:15:17 PM Server.ServerHandler run
-SEVERE: Error handling client: Connection reset
-mars 23, 2023 4:15:17 PM Server.ServerHandler run
+mars 24, 2023 8:16:29 AM Server.ServerFunction ServerFunction
+WARNING: new Client
+mars 24, 2023 8:16:31 AM Server.ServerHandler run
+INFO: Add Room :poi
+mars 24, 2023 8:16:31 AM Server.ServerHandler run
+SEVERE: Error handling client: Socket is closed
+mars 24, 2023 8:16:31 AM Server.ServerHandler run
 WARNING: Client logout
+mars 24, 2023 8:16:34 AM Server.ServerHandler run
+INFO: Login user:6
