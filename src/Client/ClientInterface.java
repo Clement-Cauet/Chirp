@@ -45,7 +45,7 @@ public class ClientInterface extends JFrame {
         setVisible(true);
 
         try {
-            Socket socket = new Socket("10.100.98.27", PORT);
+            Socket socket = new Socket("10.200.0.153", PORT);
             out = new PrintWriter(socket.getOutputStream(), true);
 
             new Thread(new ServerHandler(socket)).start();
