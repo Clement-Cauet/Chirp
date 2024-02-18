@@ -4,7 +4,7 @@ import java.sql.*;
 import java.util.ArrayList;
 
 public class DatabaseAccess {
-    private static String URL = "jdbc:mysql://localhost:3306/chirp?verifyServerCertificate=false&useSSL=true", USERNAME = "root", PASSWORD = "root";
+    private static String URL = "jdbc:mysql://localhost:3306/chirp?verifyServerCertificate=false&useSSL=true", USERNAME = "root", PASSWORD = "";
 
     private Connection connection;
 
@@ -56,7 +56,7 @@ public class DatabaseAccess {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
+        System.out.println("User connection");
         return user;
     }
 

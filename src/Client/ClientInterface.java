@@ -13,6 +13,7 @@ import java.awt.event.ActionListener;
 import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class ClientInterface extends JFrame {
 
@@ -28,7 +29,7 @@ public class ClientInterface extends JFrame {
 
     private int id;
     private String pseudo, password;
-    private PrintWriter out;
+    private PrintWriter out = new PrintWriter(System.out); ;
 
     public static void main(String[] args) throws Exception {
         new ClientInterface();
@@ -45,14 +46,14 @@ public class ClientInterface extends JFrame {
         setVisible(true);
 
         try {
-            Socket socket = new Socket("10.200.0.153", PORT);
+            Socket socket = new Socket("127.0.0.1", PORT);
             out = new PrintWriter(socket.getOutputStream(), true);
 
             new Thread(new ServerHandler(socket)).start();
         } catch (IOException e) {
             chatArea.append("Unable to connect to the server.\n");
         }
-
+        System.out.println("Connected to server");
     }
 
     // Creation the chat panel interface
@@ -157,8 +158,10 @@ public class ClientInterface extends JFrame {
         loginButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
                 out.println("Login;" + pseudoField.getText() + ";" + passwordField.getText());
+                out.flush();
             }
         });
+
 
         JButton inscriptionButton = new JButton("Sign in");
         inscriptionButton.addActionListener(new ActionListener() {
