@@ -3,6 +3,10 @@ package Server;
 import java.sql.*;
 import java.util.ArrayList;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
+
 public class DatabaseAccess {
     private static String URL = "jdbc:mysql://localhost:3306/chirp?verifyServerCertificate=false&useSSL=true", USERNAME = "root", PASSWORD = "";
 
@@ -39,12 +43,23 @@ public class DatabaseAccess {
         return connection;
     }
 
+    private String hashPassword(String password) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            byte[] hashedBytes = md.digest(password.getBytes());
+            return Base64.getEncoder().encodeToString(hashedBytes);
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException("Failed to ash", e);
+        }
+    }
+
     // Login user
     public ArrayList userLogin(String pseudo, String password) {
         ArrayList user = new ArrayList<>();
+        String hashedPassword = hashPassword(password);
         try {
             Statement statement = connection.createStatement();
-            String request = "SELECT * FROM user WHERE user.pseudo = '" + pseudo + "' AND user.password = '" + password + "'";
+            String request = "SELECT * FROM user WHERE user.pseudo = '" + pseudo + "' AND user.password = '" + hashedPassword + "'";
             ResultSet resultSet = statement.executeQuery(request);
 
             if (resultSet.next()) {
@@ -63,10 +78,11 @@ public class DatabaseAccess {
     // Inscription user
     public void userInscription(String pseudo, String password) {
         try {
+            String hashedPassword = hashPassword(password);
             String request = "INSERT INTO `user`(`pseudo`, `password`) VALUES (?, ?)";
             PreparedStatement statement = connection.prepareStatement(request);
             statement.setString(1, pseudo);
-            statement.setString(2, password);
+            statement.setString(2, hashedPassword);
             statement.executeUpdate();
         } catch (SQLException e) {
             System.err.println(e.getMessage());

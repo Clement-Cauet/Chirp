@@ -48,15 +48,16 @@ public class ServerHandler implements Runnable {
                     }
 
                 } else if (values[0].equals("Sign")) {
-
                     DataOutputStream outputStream = new DataOutputStream(clientSocket.getOutputStream());
                     databaseAccess.userInscription(values[1], values[2]);
+
+
                     ArrayList userLogin = databaseAccess.userLogin(values[1], values[2]);
 
                     logger.info("Sign in user:" + userLogin.get(0));
-
                     outputStream.writeUTF("Sign;true;" + userLogin.get(0) + ";" + userLogin.get(1));
                     outputStream.flush();
+
 
                 } else if (values[0].equals("Message")) {
 
