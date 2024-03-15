@@ -201,10 +201,16 @@ public class ClientInterface extends JFrame {
 
     // Send message to the server
     private void sendMessage(int id_room, String text) {
-        out.println("Message;" + id + ";" + pseudo + ";" + id_room + ";" + text);
-        chatArea.append(pseudo + ": \n" + text + "\n\n");
-        messageField.setText("");
+        if (out != null && !out.checkError()) {
+            out.println("Message;" + id + ";" + pseudo + ";" + id_room + ";" + text);
+            String message = pseudo + ": \n" + text + "\n\n";
+            chatArea.append(message);
+
+        } else {
+            chatArea.append("Le serveur est pas disponible\n");
+        }
     }
+
 
     // Display message in chat
     private void displayMessage(int id_room) {

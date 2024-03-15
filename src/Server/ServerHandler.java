@@ -51,7 +51,6 @@ public class ServerHandler implements Runnable {
                     DataOutputStream outputStream = new DataOutputStream(clientSocket.getOutputStream());
                     databaseAccess.userInscription(values[1], values[2]);
 
-
                     ArrayList userLogin = databaseAccess.userLogin(values[1], values[2]);
 
                     logger.info("Sign in user:" + userLogin.get(0));
