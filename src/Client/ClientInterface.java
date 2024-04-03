@@ -45,16 +45,29 @@ public class ClientInterface extends JFrame {
         setSize(800, 600);
         setVisible(true);
 
-        try {
-            Socket socket = new Socket("127.0.0.1", PORT);
-            out = new PrintWriter(socket.getOutputStream(), true);
-
-            new Thread(new ServerHandler(socket)).start();
-        } catch (IOException e) {
-            chatArea.append("Unable to connect to the server.\n");
-        }
-        System.out.println("Connected to server");
+        connectToServer();
     }
+
+    private void connectToServer() {
+        new Thread(() -> {
+            while (true) {
+                try {
+                    Socket socket = new Socket("127.0.0.1", PORT);
+                    out = new PrintWriter(socket.getOutputStream(), true);
+                    new Thread(new ServerHandler(socket)).start();
+                    break;
+                } catch (IOException e) {
+                    chatArea.append("Unable to connect to the server. Retrying in 15 seconds...\n");
+                    try {
+                        Thread.sleep(15000);
+                    } catch (InterruptedException ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            }
+        }).start();
+    }
+
 
     // Creation the chat panel interface
     private void displayChatPanel() {
@@ -261,13 +274,26 @@ public class ClientInterface extends JFrame {
                             chatArea.append(values[i]);
                         }
                     } else if (values[0].equals("Room")) {
+                        System.out.println("Room receive");
                         roomListModel.addElement(values[1]);
+                        refreshInterface();
+                    } else if (values[0].equals("REFRESH")) { // Refresh interface
+                        refreshInterface();
                     }
                 }
             } catch (IOException e) {
                 chatArea.append("Le serveur s'est déconnecté.\n");
             }
         }
-    }
 
+        // Refreshes the interface
+        private void refreshInterface() {
+            SwingUtilities.invokeLater(new Runnable() {
+                public void run() {
+                    revalidate();
+                    repaint();
+                }
+            });
+        }
+    }
 }

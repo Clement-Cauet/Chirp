@@ -1,16 +1,10 @@
-févr. 18, 2024 6:32:01 PM Server.ServerFunction ServerFunction
+avr. 03, 2024 8:23:40 AM Server.ServerFunction ServerFunction
 AVERTISSEMENT: Server start
-févr. 18, 2024 6:32:03 PM Server.ServerFunction ServerFunction
+avr. 03, 2024 8:24:17 AM Server.ServerFunction ServerFunction
 AVERTISSEMENT: new Client
-févr. 18, 2024 6:34:48 PM Server.ServerHandler run
+avr. 03, 2024 8:24:25 AM Server.ServerHandler run
+INFOS: Login user:4
+avr. 03, 2024 8:25:42 AM Server.ServerHandler run
 GRAVE: Error handling client: Connection reset
-févr. 18, 2024 6:34:48 PM Server.ServerHandler run
-AVERTISSEMENT: Client logout
-févr. 18, 2024 6:34:50 PM Server.ServerFunction ServerFunction
-AVERTISSEMENT: new Client
-févr. 18, 2024 6:34:55 PM Server.ServerHandler run
-INFOS: Login user:2
-févr. 18, 2024 6:35:13 PM Server.ServerHandler run
-GRAVE: Error handling client: Connection reset
-févr. 18, 2024 6:35:13 PM Server.ServerHandler run
+avr. 03, 2024 8:25:42 AM Server.ServerHandler run
 AVERTISSEMENT: Client logout
