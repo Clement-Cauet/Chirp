@@ -26,6 +26,8 @@ public class ClientInterface extends JFrame {
     private JButton sendButton;
     private JList<String> roomList;
     private DefaultListModel<String> roomListModel;
+    private JTextArea connectedUsersArea;
+
 
     private int id;
     private String pseudo, password;
@@ -82,12 +84,10 @@ public class ClientInterface extends JFrame {
 
             @Override
             public void removeUpdate(DocumentEvent e) {
-
             }
 
             @Override
             public void changedUpdate(DocumentEvent e) {
-
             }
         });
 
@@ -145,19 +145,30 @@ public class ClientInterface extends JFrame {
         roomPanel.add(createButton, BorderLayout.NORTH);
         roomPanel.add(roomScrollPane, BorderLayout.CENTER);
 
+        // Panel to display connected users
+        JPanel connectedUsersPanel = new JPanel(new BorderLayout());
+        connectedUsersPanel.setPreferredSize(new Dimension(200, 600)); // Adjust size as needed
+        connectedUsersPanel.setBackground(Color.LIGHT_GRAY); // Adjust background color as needed
+        connectedUsersPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK)); // Adjust border as needed
+
+        connectedUsersArea = new JTextArea();
+        connectedUsersArea.setEditable(false);
+        connectedUsersPanel.add(new JScrollPane(connectedUsersArea), BorderLayout.CENTER);
+
         chatPanel = new JPanel();
         chatPanel.setLayout(new BorderLayout());
         chatPanel.add(chatScrollPane, BorderLayout.CENTER);
         chatPanel.add(messagePanel, BorderLayout.SOUTH);
         chatPanel.add(roomPanel, BorderLayout.WEST);
+        chatPanel.add(connectedUsersPanel, BorderLayout.EAST); // Add the panel to display connected users
 
         add(chatPanel, BorderLayout.CENTER);
         loginPanel.setVisible(false);
 
         displayRoom();
         displayMessage(roomList.getSelectedIndex() + 1);
-
     }
+
 
     // Creation the login panel interface
     private void displayLoginPanel() {
@@ -279,12 +290,22 @@ public class ClientInterface extends JFrame {
                         refreshInterface();
                     } else if (values[0].equals("REFRESH")) { // Refresh interface
                         refreshInterface();
+                    } else if (values[0].equals("ConnectedUsers")) {
+                        System.out.println("T co");
+                        connectedUsersArea.append("User connected :\n");
+                        connectedUsersArea.append(values[1]);
+                        //updateConnectedUsers(usernames);
+                    } else if (values[0].equals("ResetUser")) {
+                        System.out.println("Reset call");
+                        connectedUsersArea.setText("");
                     }
                 }
             } catch (IOException e) {
                 chatArea.append("Le serveur s'est déconnecté.\n");
             }
         }
+
+
 
         // Refreshes the interface
         private void refreshInterface() {
