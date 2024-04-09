@@ -1,6 +1,7 @@
 package Server;
 
 import java.io.*;
+import java.util.*;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.logging.Logger;
@@ -69,18 +70,51 @@ public class ServerHandler implements Runnable {
 
                 } else if (values[0].equals("Message")) {
 
-                    databaseAccess.addChatMessage(Integer.valueOf(values[1]), Integer.valueOf(values[3]), values[4]);
+                    if (values[4].equals("/sauce")) {
+                        System.out.println("Sauce");
+                        try {
+                            // Open the file
+                            BufferedReader reader = new BufferedReader(new FileReader("sauce/sauce.txt"));
 
-                    logger.info("User:" + values[1] + ";Room:" + values[3] + ";Message:" + values[4]);
+                            // Read all lines into a list
+                            List<String> lines = new ArrayList<>();
+                            String line;
+                            while ((line = reader.readLine()) != null) {
+                                lines.add(line);
+                            }
+                            reader.close();
 
-                    for (Socket clientSocket : ServerFunction.clients) {
-                        if (!clientSocket.isClosed() && clientSocket != this.clientSocket) {
+                            // Choose a random line
+                            Random rand = new Random();
+                            String randomLine = lines.get(rand.nextInt(lines.size()));
+
+                            String data = "Sauce;" + randomLine;
+
                             try {
                                 DataOutputStream outputStream = new DataOutputStream(clientSocket.getOutputStream());
-                                outputStream.writeUTF("Message;" + values[3] + ";" + values[2] + ": \n" + values[4] + "\n\n");
+                                outputStream.writeUTF(data);
                                 outputStream.flush();
                             } catch (IOException e) {
                                 e.printStackTrace();
+                            }
+
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }else {
+                        databaseAccess.addChatMessage(Integer.valueOf(values[1]), Integer.valueOf(values[3]), values[4]);
+
+                        logger.info("User:" + values[1] + ";Room:" + values[3] + ";Message:" + values[4]);
+
+                        for (Socket clientSocket : ServerFunction.clients) {
+                            if (!clientSocket.isClosed() && clientSocket != this.clientSocket) {
+                                try {
+                                    DataOutputStream outputStream = new DataOutputStream(clientSocket.getOutputStream());
+                                    outputStream.writeUTF("Message;" + values[3] + ";" + values[2] + ": \n" + values[4] + "\n\n");
+                                    outputStream.flush();
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
                             }
                         }
                     }
@@ -136,11 +170,8 @@ public class ServerHandler implements Runnable {
                             e.printStackTrace();
                         }
                     }
-                } else if (values[0].equals("/sauce")) {
-
-                    
-
                 }
+
             }
 
         } catch (IOException e) {

@@ -7,11 +7,14 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
 import java.net.Socket;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -20,7 +23,8 @@ public class ClientInterface extends JFrame {
     private static final int PORT = 8964;
 
     private JPanel loginPanel, chatPanel;
-    private JTextArea pseudoArea, chatArea;
+    private JTextArea pseudoArea;
+    private JEditorPane chatArea;
     private JTextField pseudoField, messageField;
     private JPasswordField passwordField;
     private JButton sendButton;
@@ -59,7 +63,7 @@ public class ClientInterface extends JFrame {
                     new Thread(new ServerHandler(socket)).start();
                     break;
                 } catch (IOException e) {
-                    chatArea.append("Unable to connect to the server. Retrying in 15 seconds...\n");
+                    chatArea.setText("Unable to connect to the server. Retrying in 15 seconds..." + System.lineSeparator());
                     try {
                         Thread.sleep(15000);
                     } catch (InterruptedException ex) {
@@ -73,8 +77,9 @@ public class ClientInterface extends JFrame {
 
     // Creation the chat panel interface
     private void displayChatPanel() {
-        chatArea = new JTextArea();
+        chatArea = new JEditorPane();
         chatArea.setEditable(false);
+        chatArea.setContentType("text/html"); // Set content type to HTML
         JScrollPane chatScrollPane = new JScrollPane(chatArea);
         chatArea.getDocument().addDocumentListener(new DocumentListener() {
             @Override
@@ -228,17 +233,23 @@ public class ClientInterface extends JFrame {
         if (out != null && !out.checkError()) {
             out.println("Message;" + id + ";" + pseudo + ";" + id_room + ";" + text);
             String message = pseudo + ": \n" + text + "\n\n";
-            chatArea.append(message);
-
+            appendTextToChatArea(message); // Append the new message to the chat area
         } else {
-            chatArea.append("Le serveur est pas disponible\n");
+            appendTextToChatArea("Le serveur est pas disponible" + System.lineSeparator());
         }
     }
 
+    private void appendTextToChatArea(String text) {
+        Document doc = chatArea.getDocument();
+        try {
+            doc.insertString(doc.getLength(), text, null);
+        } catch (BadLocationException e) {
+            e.printStackTrace();
+        }
+    }
 
     // Display message in chat
     private void displayMessage(int id_room) {
-        chatArea.setText("");
         out.println("Load;" + id_room);
     }
 
@@ -279,10 +290,10 @@ public class ClientInterface extends JFrame {
                     } else if (values[0].equals("Message")) {
                         int id_room = roomList.getSelectedIndex() + 1;
                         if (Integer.valueOf(values[1]).equals(id_room))
-                            chatArea.append(values[2]);
+                            chatArea.setText(values[2] + System.lineSeparator());
                     } else if (values[0].equals("Load")) {
                         for (int i = 1; i < values.length; i++) {
-                            chatArea.append(values[i]);
+                            appendTextToChatArea(values[i] + "<br>");
                         }
                     } else if (values[0].equals("Room")) {
                         System.out.println("Room receive");
@@ -294,18 +305,38 @@ public class ClientInterface extends JFrame {
                         System.out.println("T co");
                         connectedUsersArea.append("User connected :\n");
                         connectedUsersArea.append(values[1]);
-                        //updateConnectedUsers(usernames);
                     } else if (values[0].equals("ResetUser")) {
                         System.out.println("Reset call");
                         connectedUsersArea.setText("");
+                    } else if (values[0].equals("Sauce")) {
+                        System.out.println("Test ok");
+
+                        String code = values[1];
+                        String title = values[2];
+                        String language = values[3];
+                        String page = values[4];
+
+                        //https://s9.3hentai.xyz/d240942/2.jpg
+                        String imageUrl = "https://s9.3hentai.xyz/d" + code + "/1.jpg";
+                        System.out.println(imageUrl);
+
+                        // Format the image URL as an HTML image tag
+                        String htmlImage = "<img src='" + imageUrl + "' width='180' height='220'>";
+
+                        chatArea.setText("");
+                        // Append the HTML image tag to the JTextArea using HTML formatting
+                        chatArea.setText("<html><body>"
+                                + "ID: " + id + "<br>"
+                                + "Title: " + title + "<br>"
+                                + "Language: " + language + "<br>"
+                                + htmlImage
+                                + "</body></html>");
                     }
                 }
             } catch (IOException e) {
-                chatArea.append("Le serveur s'est déconnecté.\n");
+                chatArea.setText("Le serveur s'est déconnecté.\n");
             }
         }
-
-
 
         // Refreshes the interface
         private void refreshInterface() {
