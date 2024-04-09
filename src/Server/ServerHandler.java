@@ -1,6 +1,8 @@
 package Server;
 
 import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.*;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -69,6 +71,28 @@ public class ServerHandler implements Runnable {
                     }
 
                 } else if (values[0].equals("Message")) {
+
+                    if (values[4].contains("/YuGiOh")){
+                        int messageNumber = extractMessageNumber(values[4]);
+
+                        // Check if the URL exists
+                        String baseURL = "https://artworks-en-n.ygorganization.com/";
+                        String url = baseURL + generatePath(messageNumber) + "_1.png";
+                        boolean urlExists = checkURLExists(url);
+
+                        String data;
+                        // If the URL exists, print it
+                        if (urlExists) {
+                            data = "YuGiOh;" + url;
+                        } else {
+                            data = "YuGiOh;" + "Non";
+                        }
+
+                        DataOutputStream outputStream = new DataOutputStream(clientSocket.getOutputStream());
+                        outputStream.writeUTF(data);
+                        outputStream.flush();
+
+                    }
 
                     if (values[4].equals("/sauce")) {
                         System.out.println("Sauce");
@@ -187,6 +211,40 @@ public class ServerHandler implements Runnable {
                 System.err.println("Error closing client socket: " + e.getMessage());
                 logger.severe("Error closing client socket: " + e.getMessage());
             }
+        }
+    }
+
+    public static int extractMessageNumber(String message) {
+        String[] parts = message.split(":");
+        return Integer.parseInt(parts[1]);
+    }
+
+    // Method to generate the path part of the URL
+    public static String generatePath(int messageNumber) {
+        String numberStr = String.valueOf(messageNumber);
+        int length = numberStr.length();
+        String path;
+
+        if (length == 5) {
+            path = numberStr.substring(0, 1) + "/" + numberStr.substring(1, 4) + "/" + numberStr.substring(4);
+        } else if (length == 4) {
+            path = "0/" + numberStr.substring(0, 2) + "/" + numberStr.substring(2);
+        } else {
+            // Handle error
+            throw new IllegalArgumentException("Invalid message number length");
+        }
+
+        return path;
+    }
+
+    public static boolean checkURLExists(String url) {
+        try {
+            HttpURLConnection.setFollowRedirects(false);
+            HttpURLConnection con = (HttpURLConnection) new URL(url).openConnection();
+            con.setRequestMethod("HEAD");
+            return (con.getResponseCode() == HttpURLConnection.HTTP_OK);
+        } catch (IOException e) {
+            return false;
         }
     }
 

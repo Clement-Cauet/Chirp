@@ -309,7 +309,7 @@ public class ClientInterface extends JFrame {
                         System.out.println("Reset call");
                         connectedUsersArea.setText("");
                     } else if (values[0].equals("Sauce")) {
-                        System.out.println("Test ok");
+                        //System.out.println("Test ok");
 
                         String code = values[1];
                         String title = values[2];
@@ -321,6 +321,7 @@ public class ClientInterface extends JFrame {
                         System.out.println(imageUrl);
 
                         // Format the image URL as an HTML image tag
+                        // https://i.pinimg.com/originals/ee/3e/29/ee3e295eb8ca1d142f4fb33099002e40.gif
                         String htmlImage = "<img src='" + imageUrl + "' width='180' height='220'>";
 
                         chatArea.setText("");
@@ -331,7 +332,28 @@ public class ClientInterface extends JFrame {
                                 + "Language: " + language + "<br>"
                                 + htmlImage
                                 + "</body></html>");
+
+                    } else if (values[0].equals("YuGiOh")) {
+                        String url = values[1];
+                        if(url.equals("Non")){
+                            chatArea.setText("");
+
+                            chatArea.setText("<html><body>"
+                                    + "The given card id doesnt not exit."
+                                    + "</body></html>");
+                        }else {
+                            System.out.println(url);
+
+                            String htmlImage = "<img src='" + url + "' width='320' height='465'>";
+
+                            chatArea.setText("");
+                            chatArea.setText("<html><body>"
+                                    + htmlImage
+                                    + "</body></html>");
+                        }
+
                     }
+
                 }
             } catch (IOException e) {
                 chatArea.setText("Le serveur s'est déconnecté.\n");
