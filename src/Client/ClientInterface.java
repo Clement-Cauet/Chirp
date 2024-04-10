@@ -312,8 +312,8 @@ public class ClientInterface extends JFrame {
                     } else if (values[0].equals("REFRESH")) { // Refresh interface
                         refreshInterface();
                     } else if (values[0].equals("ConnectedUsers")) {
-                        System.out.println("T co");
-                        connectedUsersArea.append("User connected :\n");
+                        //System.out.println("T co");
+                        //connectedUsersArea.append("User connected :\n");
                         connectedUsersArea.append(values[1]);
                     } else if (values[0].equals("ResetUser")) {
                         System.out.println("Reset call");
