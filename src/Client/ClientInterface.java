@@ -14,9 +14,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
 import java.net.Socket;
-import java.net.URL;
-import java.util.ArrayList;
+
+import javax.swing.event.HyperlinkEvent;
+import javax.swing.event.HyperlinkListener;
+import java.awt.Desktop;
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.Arrays;
+
 
 public class ClientInterface extends JFrame {
 
@@ -110,6 +115,7 @@ public class ClientInterface extends JFrame {
         sendButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
                 sendMessage(roomList.getSelectedIndex() + 1, messageField.getText());
+                messageField.setText("");
             }
         });
 
@@ -292,8 +298,12 @@ public class ClientInterface extends JFrame {
                         if (Integer.valueOf(values[1]).equals(id_room))
                             chatArea.setText(values[2] + System.lineSeparator());
                     } else if (values[0].equals("Load")) {
+                        Document doc = chatArea.getDocument();
+                        doc.remove(0, doc.getLength());
+
+                        System.out.println(Arrays.toString(values));
                         for (int i = 1; i < values.length; i++) {
-                            appendTextToChatArea(values[i] + "<br>");
+                            appendTextToChatArea(values[i]);
                         }
                     } else if (values[0].equals("Room")) {
                         System.out.println("Room receive");
@@ -308,7 +318,7 @@ public class ClientInterface extends JFrame {
                     } else if (values[0].equals("ResetUser")) {
                         System.out.println("Reset call");
                         connectedUsersArea.setText("");
-                    } else if (values[0].equals("Sauce")) {
+                    } else if (values[0].equals("/Sauce")) {
                         //System.out.println("Test ok");
 
                         String code = values[1];
@@ -318,22 +328,48 @@ public class ClientInterface extends JFrame {
 
                         //https://s9.3hentai.xyz/d240942/2.jpg
                         String imageUrl = "https://s9.3hentai.xyz/d" + code + "/1.jpg";
+                        String urlLink = "https://fra.3hentai.net/d/" + code;
                         System.out.println(imageUrl);
 
                         // Format the image URL as an HTML image tag
                         // https://i.pinimg.com/originals/ee/3e/29/ee3e295eb8ca1d142f4fb33099002e40.gif
                         String htmlImage = "<img src='" + imageUrl + "' width='180' height='220'>";
 
-                        chatArea.setText("");
-                        // Append the HTML image tag to the JTextArea using HTML formatting
-                        chatArea.setText("<html><body>"
-                                + "ID: " + id + "<br>"
-                                + "Title: " + title + "<br>"
-                                + "Language: " + language + "<br>"
-                                + htmlImage
-                                + "</body></html>");
+                        try {
+                            // Append the HTML content instead of setting it
+                            Document doc = chatArea.getDocument();
+                            doc.insertString(doc.getLength(), "<html><body>"
+                                    + "Code: " + code + "<br>"
+                                    + "Title: " + title + "<br>"
+                                    + "Language: " + language + "<br>"
+                                    + "Page: " + page + "<br>"
+                                    + htmlImage + "<br>"
+                                    + "<a href='" + urlLink + "'>" + urlLink + "</a><br>"
+                                    + "</body></html>", null);
 
-                    } else if (values[0].equals("YuGiOh")) {
+                            // Add the HyperlinkListener after appending the HTML content
+                            chatArea.addHyperlinkListener(new HyperlinkListener() {
+                                @Override
+                                public void hyperlinkUpdate(HyperlinkEvent e) {
+                                    if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
+                                        if (Desktop.isDesktopSupported()) {
+                                            try {
+                                                Desktop.getDesktop().browse(e.getURL().toURI());
+                                            } catch (IOException | URISyntaxException ex) {
+                                                ex.printStackTrace();
+                                            }
+                                        } else {
+                                            System.out.println("shit");
+                                        }
+                                    }
+                                }
+                            });
+                        } catch (BadLocationException e) {
+                            e.printStackTrace();
+                        }
+
+
+                    } else if (values[0].equals("/YuGiOh")) {
                         String url = values[1];
                         if(url.equals("Non")){
                             chatArea.setText("");
@@ -357,6 +393,8 @@ public class ClientInterface extends JFrame {
                 }
             } catch (IOException e) {
                 chatArea.setText("Le serveur s'est déconnecté.\n");
+            } catch (BadLocationException e) {
+                throw new RuntimeException(e);
             }
         }
 

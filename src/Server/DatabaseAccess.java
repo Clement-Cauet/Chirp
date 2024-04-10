@@ -110,7 +110,7 @@ public class DatabaseAccess {
             Statement statement = connection.createStatement();
             String request = "SELECT user.pseudo, message.text FROM message INNER JOIN user ON message.id_user = user.id WHERE message.id_room = " + id_room;
             ResultSet resultSet = statement.executeQuery(request);
-
+            System.out.println(id_room);
             while (resultSet.next()) {
                 String pseudo = resultSet.getString("pseudo");
                 String text = resultSet.getString("text");

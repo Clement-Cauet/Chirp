@@ -83,9 +83,9 @@ public class ServerHandler implements Runnable {
                         String data;
                         // If the URL exists, print it
                         if (urlExists) {
-                            data = "YuGiOh;" + url;
+                            data = "/YuGiOh;" + url;
                         } else {
-                            data = "YuGiOh;" + "Non";
+                            data = "/YuGiOh;" + "Non";
                         }
 
                         DataOutputStream outputStream = new DataOutputStream(clientSocket.getOutputStream());
@@ -112,7 +112,7 @@ public class ServerHandler implements Runnable {
                             Random rand = new Random();
                             String randomLine = lines.get(rand.nextInt(lines.size()));
 
-                            String data = "Sauce;" + randomLine;
+                            String data = "/Sauce;" + randomLine;
 
                             try {
                                 DataOutputStream outputStream = new DataOutputStream(clientSocket.getOutputStream());

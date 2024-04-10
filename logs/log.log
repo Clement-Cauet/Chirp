@@ -1,24 +1,18 @@
-avr. 09, 2024 10:09:36 PM Server.ServerFunction ServerFunction
+avr. 10, 2024 8:41:06 AM Server.ServerFunction ServerFunction
 AVERTISSEMENT: Server start
-avr. 09, 2024 10:09:45 PM Server.ServerFunction ServerFunction
+avr. 10, 2024 8:41:07 AM Server.ServerFunction ServerFunction
 AVERTISSEMENT: new Client
-avr. 09, 2024 10:09:49 PM Server.ServerHandler run
+avr. 10, 2024 8:41:11 AM Server.ServerHandler run
 INFOS: Login user:4
-avr. 09, 2024 10:10:04 PM Server.ServerHandler run
-INFOS: User:4;Room:1;Message:Greg
-avr. 09, 2024 10:11:35 PM Server.ServerHandler run
+avr. 10, 2024 8:41:39 AM Server.ServerHandler run
 GRAVE: Error handling client: Connection reset
-avr. 09, 2024 10:11:35 PM Server.ServerHandler run
+avr. 10, 2024 8:41:39 AM Server.ServerHandler run
 AVERTISSEMENT: Client logout
-avr. 09, 2024 10:11:37 PM Server.ServerFunction ServerFunction
+avr. 10, 2024 8:43:33 AM Server.ServerFunction ServerFunction
 AVERTISSEMENT: new Client
-avr. 09, 2024 10:11:43 PM Server.ServerHandler run
+avr. 10, 2024 8:43:37 AM Server.ServerHandler run
 INFOS: Login user:4
-avr. 09, 2024 10:12:23 PM Server.ServerHandler run
-INFOS: User:4;Room:3;Message:/YuGiOh:7734
-avr. 09, 2024 10:12:31 PM Server.ServerHandler run
-INFOS: User:4;Room:3;Message:/YuGiOh:7735
-avr. 09, 2024 10:12:37 PM Server.ServerHandler run
+avr. 10, 2024 8:43:45 AM Server.ServerHandler run
 GRAVE: Error handling client: Connection reset
-avr. 09, 2024 10:12:37 PM Server.ServerHandler run
+avr. 10, 2024 8:43:45 AM Server.ServerHandler run
 AVERTISSEMENT: Client logout
