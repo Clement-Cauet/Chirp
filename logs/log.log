@@ -16,3 +16,27 @@ avr. 10, 2024 8:43:45 AM Server.ServerHandler run
 GRAVE: Error handling client: Connection reset
 avr. 10, 2024 8:43:45 AM Server.ServerHandler run
 AVERTISSEMENT: Client logout
+avr. 10, 2024 8:47:22 AM Server.ServerFunction ServerFunction
+AVERTISSEMENT: new Client
+avr. 10, 2024 8:47:28 AM Server.ServerHandler run
+INFOS: Login user:3
+avr. 10, 2024 8:47:54 AM Server.ServerFunction ServerFunction
+AVERTISSEMENT: new Client
+avr. 10, 2024 8:48:03 AM Server.ServerHandler run
+INFOS: Login user:4
+avr. 10, 2024 8:48:17 AM Server.ServerHandler run
+GRAVE: Error handling client: Connection reset
+avr. 10, 2024 8:48:17 AM Server.ServerHandler run
+AVERTISSEMENT: Client logout
+avr. 10, 2024 8:48:29 AM Server.ServerHandler run
+GRAVE: Error handling client: Connection reset
+avr. 10, 2024 8:48:29 AM Server.ServerHandler run
+AVERTISSEMENT: Client logout
+avr. 10, 2024 8:48:33 AM Server.ServerFunction ServerFunction
+AVERTISSEMENT: new Client
+avr. 10, 2024 8:48:36 AM Server.ServerHandler run
+INFOS: Login user:4
+avr. 10, 2024 8:48:46 AM Server.ServerHandler run
+GRAVE: Error handling client: Connection reset
+avr. 10, 2024 8:48:46 AM Server.ServerHandler run
+AVERTISSEMENT: Client logout

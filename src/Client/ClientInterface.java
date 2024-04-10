@@ -335,39 +335,33 @@ public class ClientInterface extends JFrame {
                         // https://i.pinimg.com/originals/ee/3e/29/ee3e295eb8ca1d142f4fb33099002e40.gif
                         String htmlImage = "<img src='" + imageUrl + "' width='180' height='220'>";
 
-                        try {
-                            // Append the HTML content instead of setting it
-                            Document doc = chatArea.getDocument();
-                            doc.insertString(doc.getLength(), "<html><body>"
-                                    + "Code: " + code + "<br>"
-                                    + "Title: " + title + "<br>"
-                                    + "Language: " + language + "<br>"
-                                    + "Page: " + page + "<br>"
-                                    + htmlImage + "<br>"
-                                    + "<a href='" + urlLink + "'>" + urlLink + "</a><br>"
-                                    + "</body></html>", null);
+                        chatArea.setText("");
+                        // Append the HTML image tag to the JTextArea using HTML formatting
+                        chatArea.setText("<html><body>"
+                                + "Code: " + code + "<br>"
+                                + "Title: " + title + "<br>"
+                                + "Language: " + language + "<br>"
+                                + "Page: " + page + "<br>"
+                                + htmlImage + "<br>"
+                                + "<a href='" + urlLink + "'>" + urlLink + "</a><br>"
+                                + "</body></html>");
 
-                            // Add the HyperlinkListener after appending the HTML content
-                            chatArea.addHyperlinkListener(new HyperlinkListener() {
-                                @Override
-                                public void hyperlinkUpdate(HyperlinkEvent e) {
-                                    if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
-                                        if (Desktop.isDesktopSupported()) {
-                                            try {
-                                                Desktop.getDesktop().browse(e.getURL().toURI());
-                                            } catch (IOException | URISyntaxException ex) {
-                                                ex.printStackTrace();
-                                            }
-                                        } else {
-                                            System.out.println("shit");
+                        chatArea.addHyperlinkListener(new HyperlinkListener() {
+                            @Override
+                            public void hyperlinkUpdate(HyperlinkEvent e) {
+                                if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
+                                    if (Desktop.isDesktopSupported()) {
+                                        try {
+                                            Desktop.getDesktop().browse(e.getURL().toURI());
+                                        } catch (IOException | URISyntaxException ex) {
+                                            ex.printStackTrace();
                                         }
+                                    } else {
+                                        // Desktop is not supported, handle it accordingly
                                     }
                                 }
-                            });
-                        } catch (BadLocationException e) {
-                            e.printStackTrace();
-                        }
-
+                            }
+                        });
 
                     } else if (values[0].equals("/YuGiOh")) {
                         String url = values[1];
